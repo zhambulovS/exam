@@ -12,7 +12,8 @@ class Exam extends Model
         'exam_name',
         'subject_id',
         'date',
-        'time'
+        'time',
+        'attempt'
     ];
     public function subject(){
         return $this->hasMany(Subject::class, 'id', 'subject_id');

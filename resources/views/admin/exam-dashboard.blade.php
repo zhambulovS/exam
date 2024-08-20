@@ -31,6 +31,8 @@
                         <input type="date" name="date" class="w-100" required>
                         <br><br>
                         <input type="time" name="time" class="w-100" required>
+                        <br><br>
+                        <input type="number" name="attempt" class="w-100" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -66,6 +68,8 @@
                         <input type="date" name="date" id="date" class="w-100" required>
                         <br><br>
                         <input type="time" name="time" id="time" class="w-100" required>
+                        <br><br>
+                        <input type="number" name="attempt" id="attempt" class="w-100" required>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -106,6 +110,7 @@
             <th scope="col">Subject</th>
             <th scope="col">Date</th>
             <th scope="col">Time</th>
+            <th scope="col">Attempt</th>
             <th scope="col">Edit</th>
             <th scope="col">Delete</th>
         </tr>
@@ -119,6 +124,7 @@
                     <td> {{ $exam->subject[0]['subject'] }}</td>
                     <td> {{ \Carbon\Carbon::parse($exam->date)->format('d-m-Y') }} </td>
                     <td> {{ $exam->time }} </td>
+                    <td> {{ $exam->attempt }} </td>
                     <td><button class="btn btn-info editButtonExam" data-bs-toggle="modal" data-bs-target="#editExam" data-id="{{$exam->id}}">Edit</button></td>
                     <td><button class="btn btn-danger deleteButtonExam" data-bs-toggle="modal" data-bs-target="#deleteExam" data-id="{{$exam->id}}">Delete</button></td>
                 </tr>

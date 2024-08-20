@@ -175,6 +175,7 @@
                     $("#subject_id").val(exam.subject_id);
                     $("#date").val(exam.date);
                     $("#time").val(exam.time);
+                    $("#attempt").val(exam.attempt);
                 } else {
                     alert(data.msg);
                 }
