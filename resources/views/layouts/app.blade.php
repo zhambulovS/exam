@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/registrations/registration-7/assets/css/registration-7.css">
     <link href="https://cdn-icons-png.flaticon.com/512/5910/5910333.png" rel="icon">
-    <title>Test</title>
+    <title>Examination</title>
 
 </head>
 

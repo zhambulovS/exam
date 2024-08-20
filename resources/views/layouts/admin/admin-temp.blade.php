@@ -7,7 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
-    <title>Examination app</title>
+    <title>Examination</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{asset('assets/css/admin/style.css')}}">
 </head>
@@ -109,15 +109,14 @@
         });
     });
 
-
-    $(".editButton").click(function () {
+    $(".editButtonSubject").click(function () {
         var subject_id = $(this).attr('data-id');
         var subject = $(this).attr('data-subject');
         $("#edit_subject").val(subject);
         $("#edit_subject_id").val(subject_id);  // Use the correct input ID
     });
 
-    $(".deleteButton").click(function () {
+    $(".deleteButtonSubject").click(function () {
         var subject_id = $(this).attr('data-id');
         $("#delete_subject_id").val(subject_id);  // Use the correct input ID
     });
@@ -142,7 +141,50 @@
         });
     });
 
-</script>
+    $('#editExamForm').submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+            url: "{{ route('editExam') }}",
+            type: "POST",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data){
+                if (data.success == true) {
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
 
+    $(".editButtonExam").click(function () {
+        var id = $(this).attr('data-id');
+        $("#exam_id").val(id);
+
+        var url = '{{route("getExamDetail", "id")}}';
+        url = url.replace('id', id);
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (data) {
+                if (data.success == true) {
+                    var exam = data.data[0];
+                    $("#exam_name").val(exam.exam_name);
+                    $("#subject_id").val(exam.subject_id);
+                    $("#date").val(exam.date);
+                    $("#time").val(exam.time);
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+
+</script>
 </body>
 </html>

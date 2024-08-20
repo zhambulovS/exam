@@ -76,9 +76,6 @@
         </div>
     </div>
 
-
-
-
     {{--  SUBJECTS TABLE  --}}
     <table class="table">
         <thead>
@@ -93,10 +90,10 @@
             @if(count($subjects)>0)
                 @foreach($subjects as $subject)
                     <tr>
-                    <th scope="row">{{$subject->id}}</th>
-                    <td>{{$subject->subject}}</td>
-                    <td><button class="btn btn-info editButton" data-bs-toggle="modal" data-bs-target="#editSubject" data-id="{{$subject->id}}" data-subject="{{$subject->subject}}">Edit</button></td>
-                    <td><button class="btn btn-danger deleteButton" data-bs-toggle="modal" data-bs-target="#deleteSubject" data-id="{{$subject->id}}">Delete</button></td>
+                        <th scope="row">{{$subject->id}}</th>
+                        <td>{{$subject->subject}}</td>
+                        <td><button class="btn btn-info editButtonSubject" data-bs-toggle="modal" data-bs-target="#editSubject" data-id="{{$subject->id}}" data-subject="{{$subject->subject}}">Edit</button></td>
+                        <td><button class="btn btn-danger deleteButtonSubject" data-bs-toggle="modal" data-bs-target="#deleteSubject" data-id="{{$subject->id}}">Delete</button></td>
                     </tr>
                 @endforeach
             @endif
