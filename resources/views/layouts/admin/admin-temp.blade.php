@@ -24,7 +24,10 @@
         <h1><a href="{{route('admin.dashboard')}}" class="logo">Admin dashboard</a></h1>
         <ul class="list-unstyled components mb-5">
             <li>
-                <a href="#"><span class="fa fa-book mr-3"></span> Subjects</a>
+                <a href="{{route('admin.dashboard')}}"><span class="fa fa-book mr-3"></span> Subjects</a>
+            </li>
+            <li>
+                <a href="{{route('admin.examDashboard')}}"><span class="fa fa-desktop mr-3"></span> Exams</a>
             </li>
             <li>
                 <a href="{{route('logout')}}"><span class="fa fa-sign-out mr-3"></span> Logout</a>
@@ -46,10 +49,7 @@
     $(document).ready(function (){
         $('#addSubjectForm').submit(function (e) {
             e.preventDefault();
-
             var formData = $(this).serialize();
-            console.log(formData); // Check the serialized data
-
             $.ajax({
                 url: "{{ route('addSubject') }}",
                 type: "POST",
@@ -58,7 +58,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
                 success: function (data){
-                    console.log(data); // Log the response
                     if (data.success == true) {
                         location.reload();
                     } else {
@@ -70,7 +69,78 @@
         });
     });
 
+        $('#editSubjectForm').submit(function (e) {
+            e.preventDefault();
+            var formData = $(this).serialize();
+            $.ajax({
+                url: "{{ route('editSubject') }}",
+                type: "POST",
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data){
+                    if (data.success == true) {
+                        location.reload();
+                    } else {
+                        alert(data.msg);
+                    }
+                }
+            });
+        });
 
+    $('#deleteSubjectForm').submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+            url: "{{ route('deleteSubject') }}",
+            type: "POST",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data){
+                if (data.success == true) {
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+
+
+    $(".editButton").click(function () {
+        var subject_id = $(this).attr('data-id');
+        var subject = $(this).attr('data-subject');
+        $("#edit_subject").val(subject);
+        $("#edit_subject_id").val(subject_id);  // Use the correct input ID
+    });
+
+    $(".deleteButton").click(function () {
+        var subject_id = $(this).attr('data-id');
+        $("#delete_subject_id").val(subject_id);  // Use the correct input ID
+    });
+
+    $('#addExamForm').submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+            url: "{{ route('addExam') }}",
+            type: "POST",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data){
+                if (data.success == true) {
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
 
 </script>
 
