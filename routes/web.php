@@ -1,18 +1,34 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
+Route::get('/register', [AuthController::class, 'loadRegister'])->name('loadRegister');
+Route::post('/register', [AuthController::class, 'studentRegister'])->name('studentRegister');
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [AuthController::class, 'loadLogin'])->name('loadLogin');
+Route::post('/', [AuthController::class, 'userLogin'])->name('userLogin');
+
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/forget-password', [AuthController::class, 'forgetPasswordLoad'])->name('forgetPasswordLoad');
+Route::post('/forget-password', [AuthController::class, 'forgetPassword'])->name('forgetPassword');
+
+Route::get('/reset-password/{token}', [AuthController::class, 'resetPasswordLoad']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+
+Route::get('/404', function(){
+    return view('404');
+});
+
+Route::group(['middleware' => ['web', 'checkAdmin']], function () {
+    Route::get('/admin/dashboard', [AuthController::class, 'adminDashboard'])->name('admin.dashboard');
+
+    Route::post('/add-subject', [AdminController::class, 'addSubject'])->name('addSubject');
+    Route::post('/edit-subject', [AdminController::class, 'editSubject'])->name('editSubject');
+    Route::post('/delete-subject', [AdminController::class, 'deleteSubject'])->name('deleteSubject');
+});
+Route::group(['middleware' => ['web', 'checkUser']], function () {
+    Route::get('/dashboard', [AuthController::class, 'loadDashboard'])->name('load.dashboard');
 });
