@@ -77,8 +77,15 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         }
     }
+    public function deleteExam(Request $request){
+        try{
+            Exam::where('id', $request->id)->delete();
+            return response()->json(['success' => true, 'msg' => 'Exam deleted successfully.']);
+        }catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 
-    public function deleteExam(Request $request){}
     public function getExamDetail($id)
     {
         try{

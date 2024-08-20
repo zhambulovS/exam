@@ -88,6 +88,12 @@
                 }
             });
         });
+        $(".editButtonSubject").click(function () {
+            var subject_id = $(this).attr('data-id');
+            var subject = $(this).attr('data-subject');
+            $("#edit_subject").val(subject);
+            $("#edit_subject_id").val(subject_id);  // Use the correct input ID
+        });
 
     $('#deleteSubjectForm').submit(function (e) {
         e.preventDefault();
@@ -108,14 +114,6 @@
             }
         });
     });
-
-    $(".editButtonSubject").click(function () {
-        var subject_id = $(this).attr('data-id');
-        var subject = $(this).attr('data-subject');
-        $("#edit_subject").val(subject);
-        $("#edit_subject_id").val(subject_id);  // Use the correct input ID
-    });
-
     $(".deleteButtonSubject").click(function () {
         var subject_id = $(this).attr('data-id');
         $("#delete_subject_id").val(subject_id);  // Use the correct input ID
@@ -160,7 +158,6 @@
             }
         });
     });
-
     $(".editButtonExam").click(function () {
         var id = $(this).attr('data-id');
         $("#exam_id").val(id);
@@ -183,6 +180,30 @@
                 }
             }
         });
+    });
+
+    $('#deleteExamForm').submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serialize();
+        $.ajax({
+            url: "{{ route('deleteExam') }}",
+            type: "POST",
+            data: formData,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function (data){
+                if (data.success == true) {
+                    location.reload();
+                } else {
+                    alert(data.msg);
+                }
+            }
+        });
+    });
+    $(".deleteButtonExam").click(function () {
+        var id = $(this).attr('data-id');
+        $("#deleteExamId").val(id);
     });
 
 </script>
