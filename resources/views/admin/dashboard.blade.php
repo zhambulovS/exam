@@ -71,7 +71,6 @@
                         <button type="submit" class="btn btn-danger">Delete</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -99,5 +98,77 @@
             @endif
         </tbody>
     </table>
+    <script>
+        $(document).ready(function (){
+            $('#addSubjectForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('addSubject') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data){
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
 
+                });
+            });
+            $('#editSubjectForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('editSubject') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data){
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            $(".editButtonSubject").click(function () {
+                var subject_id = $(this).attr('data-id');
+                var subject = $(this).attr('data-subject');
+                $("#edit_subject").val(subject);
+                $("#edit_subject_id").val(subject_id);  // Use the correct input ID
+            });
+            $('#deleteSubjectForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('deleteSubject') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data){
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            $(".deleteButtonSubject").click(function () {
+                var subject_id = $(this).attr('data-id');
+                $("#delete_subject_id").val(subject_id);  // Use the correct input ID
+            });
+
+        });
+    </script>
 @endsection

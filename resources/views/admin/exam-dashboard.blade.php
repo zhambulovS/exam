@@ -131,5 +131,93 @@
         @endif
         </tbody>
     </table>
+    <script>
+        $(document).ready(function (){
+            $('#addExamForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('addExam') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data){
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            $('#editExamForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('editExam') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data){
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            $(".editButtonExam").click(function () {
+                var id = $(this).attr('data-id');
+                $("#exam_id").val(id);
 
+                var url = '{{route("getExamDetail", "id")}}';
+                url = url.replace('id', id);
+
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    success: function (data) {
+                        if (data.success == true) {
+                            var exam = data.data[0];
+                            $("#exam_name").val(exam.exam_name);
+                            $("#subject_id").val(exam.subject_id);
+                            $("#date").val(exam.date);
+                            $("#time").val(exam.time);
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+
+            $('#deleteExamForm').submit(function (e) {
+                e.preventDefault();
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: "{{ route('deleteExam') }}",
+                    type: "POST",
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (data){
+                        if (data.success == true) {
+                            location.reload();
+                        } else {
+                            alert(data.msg);
+                        }
+                    }
+                });
+            });
+            $(".deleteButtonExam").click(function () {
+                var id = $(this).attr('data-id');
+                $("#deleteExamId").val(id);
+            });
+        });
+    </script>
 @endsection
