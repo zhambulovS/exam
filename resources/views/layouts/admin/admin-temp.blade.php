@@ -30,6 +30,9 @@
                 <a href="{{route('admin.examDashboard')}}"><span class="fa fa-desktop mr-3"></span> Exams</a>
             </li>
             <li>
+                <a href="{{route('admin.qnaDashboard')}}"><span class="fa fa-question-circle mr-3"></span> Q&A</a>
+            </li>
+            <li>
                 <a href="{{route('logout')}}"><span class="fa fa-sign-out mr-3"></span> Logout</a>
             </li>
         </ul>
@@ -67,7 +70,6 @@
 
             });
         });
-    });
 
         $('#editSubjectForm').submit(function (e) {
             e.preventDefault();
@@ -175,7 +177,6 @@
                     $("#subject_id").val(exam.subject_id);
                     $("#date").val(exam.date);
                     $("#time").val(exam.time);
-                    $("#attempt").val(exam.attempt);
                 } else {
                     alert(data.msg);
                 }
@@ -207,6 +208,77 @@
         $("#deleteExamId").val(id);
     });
 
+        $("#addAnswer").click(function () {
+            if($(".answers").length >= 6){
+                $(".error").text("You can add max 6 answers");
+                setTimeout(function () {
+                    $(".error").text("");
+                }, 2000);
+            }
+            else {
+                var html = `
+            <div class="row mt-2 answers">
+                <div class="col-auto">
+                    <input type="radio" name="is_correct" class="is_correct">
+                </div>
+                <div class="col">
+                    <input class="w-100" type="text" name="answers[]" placeholder="Enter answer" required>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-danger remove-answer">Remove</button>
+                </div>
+            </div>`;
+                $(".modal-body").append(html);
+            }
+        });
+
+        $('#addQnaForm').submit(function (e) {
+            e.preventDefault();
+
+            if ($(".answers").length < 2) {
+                $(".error").text("Please add a minimum of 2 answers");
+                setTimeout(function () {
+                    $(".error").text("");
+                }, 2000);
+            } else {
+                var checkIsCorrect = false;
+
+                $(".is_correct").each(function(index) {
+                    if ($(this).prop('checked')) {
+                        checkIsCorrect = true;
+                        $(this).val($(this).closest('.answers').find('input[name="answers[]"]').val());
+                    }
+                });
+
+                if (checkIsCorrect) {
+                    var formData = $(this).serialize();
+                    $.ajax({
+                        url: "{{route('admin.addQna')}}",
+                        type: "POST",
+                        data: formData,
+                        success: function (data) {
+                            if (data.success == true) {
+                                location.reload();
+                            } else {
+                                alert(data.msg);
+                            }
+                        }
+                    });
+                } else {
+                    $(".error").text("Please select anyone correct answer");
+                    setTimeout(function () {
+                        $(".error").text("");
+                    }, 2000);
+                }
+            }
+        });
+
+        // Handle removing an answer
+        $(document).on('click', '.remove-answer', function () {
+            $(this).closest('.answers').remove();
+        });
+
+    });
 </script>
 </body>
 </html>

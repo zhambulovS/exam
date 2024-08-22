@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\Subject;
 class AdminController extends Controller
@@ -13,7 +15,11 @@ class AdminController extends Controller
         $exams = Exam::with('subject')->get();
         return view('admin.exam-dashboard', ['subjects'=>$subjects, 'exams'=>$exams]);
     }
-
+    public function qnaDashboard()
+    {
+        return view('admin.qnaDashboard');
+    }
+//--------------------------------------------------
     public function addSubject(Request $request)
     {
         try {
@@ -56,7 +62,6 @@ class AdminController extends Controller
                 'subject_id'=>$request->subject_id,
                 'date'=>$request->date,
                 'time'=>$request->time,
-                'attempt'=>$request->attempt,
             ]);
             return response()->json(['success' => true, 'msg' => 'Exam added successfully.']);
         }catch (\Exception $e) {
@@ -70,8 +75,7 @@ class AdminController extends Controller
             $exam->exam_name = $request->exam_name;
             $exam->subject_id = $request->subject_id; // This was missing
             $exam->date = $request->date;             // Corrected field name
-            $exam->time = $request->time;
-            $exam->attempt=$request->attempt;
+            $exam->time = $request->time;             // Corrected field name
             $exam->save();
 
             return response()->json(['success' => true, 'msg' => 'Exam updated successfully.']);
@@ -98,6 +102,30 @@ class AdminController extends Controller
         }
     }
 
+    public function addQna(Request $request)
+    {
+        try {
+            $questionsId = Question::insertGetId([
+                'question'=> $request->question,
+            ]);
+
+            foreach($request->answers as $answer){
+                $is_correct = 0;
+                if($request->is_correct == $answer){
+                    $is_correct = 1;
+                }
+                Answer::insert([
+                    'questions_id' => $questionsId,
+                    'answers' => $answer,
+                    'is_correct' => $is_correct,
+                ]);
+            }
+
+            return response()->json(['success' => true, 'msg' => 'Question added successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 
 
 }

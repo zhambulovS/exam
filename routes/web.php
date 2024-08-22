@@ -35,6 +35,8 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function () {
     Route::post('/delete-exam', [AdminController::class, 'deleteExam'])->name('deleteExam');
     Route::get('/get-exam-detail{id}', [AdminController::class, 'getExamDetail'])->name('getExamDetail');
 
+    Route::get('/admin/qna', [AdminController::class, 'qnaDashboard'])->name('admin.qnaDashboard');
+    Route::post('/add-qna-ans', [AdminController::class, 'addQna'])->name('admin.addQna');
 });
 Route::group(['middleware' => ['web', 'checkUser']], function () {
     Route::get('/dashboard', [AuthController::class, 'loadDashboard'])->name('load.dashboard');
