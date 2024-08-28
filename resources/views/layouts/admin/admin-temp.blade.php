@@ -34,6 +34,9 @@
                 <a href="{{route('admin.qnaDashboard')}}"><span class="fa fa-question-circle mr-3"></span> Q&A</a>
             </li>
             <li>
+                <a href="{{route('admin.students')}}"><span class="fa fa-graduation-cap mr-3"></span>Students</a>
+            </li>
+            <li>
                 <a href="{{route('logout')}}"><span class="fa fa-sign-out mr-3"></span> Logout</a>
             </li>
         </ul>
