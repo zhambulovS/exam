@@ -10,6 +10,9 @@ class Question extends Model
     use HasFactory;
     protected $fillable = [
         'question',
+        'questions_id',
+        'is_correct',
+        'answers'
     ];
     public function answers(){
         return $this->hasMany(Answer::class, 'questions_id','id');

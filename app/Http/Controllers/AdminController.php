@@ -128,5 +128,63 @@ class AdminController extends Controller
         }
     }
 
+    public function getQnaDetail(Request $request)
+    {
+        $qna = Question::where('id', $request->qid)->with('answers')->get();
+        return response()->json(['success' => true, 'data' => $qna,'msg' => 'Question added successfully.']);
+    }
+
+    public function deleteAns(Request $request)
+    {
+        Answer::where('id', $request->id)->delete();
+        return response()->json(['success' => true, 'msg' => 'Answer deleted successfully.']);
+    }
+
+    public function updateAns(Request $request)
+    {
+        try{
+            Question::where('id', request()->questions_id)->update([
+                'question'=>$request->question,
+            ]);
+
+            if(isset($request->answers)){
+                foreach($request->answers as $key => $value){
+                    $is_correct = 0;
+                    if($request->is_correct == $value){
+                        $is_correct = 1;
+                    }
+                    Answer::where('id', $key)->update([
+                        'questions_id' => $request->questions_id,
+                        'answers' => $value,
+                        'is_correct' => $is_correct,
+                    ]);
+                }
+            }
+
+            if(isset($request->new_answers)){
+                foreach($request->new_answers as $answer){
+                    $is_correct = 0;
+                    if($request->is_correct == $answer){
+                        $is_correct = 1;
+                    }
+                    Answer::insert([
+                        'questions_id' => $request->questions_id,
+                        'answers' => $answer,
+                        'is_correct' => $is_correct,
+                    ]);
+                }
+            }
+            return response()->json(['success' => true, 'msg' => 'Question updated successfully.']);
+        }catch (\Exception $e) {
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+    public function deleteQnaAns(Request $request)
+    {
+        Question::where('id', $request->id)->delete();
+        Answer::where('questions_id', $request->id)->delete();
+        return response()->json(['success' => true, 'msg' => 'Question deleted successfully.']);
+    }
+
 
 }
