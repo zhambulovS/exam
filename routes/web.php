@@ -42,6 +42,10 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function () {
     Route::post('/update-qna-ans', [AdminController::class, 'updateAns'])->name('updateAns');
     Route::post('/delete-qna-ans', [AdminController::class, 'deleteQnaAns'])->name('deleteQnaAns');
 
+    Route::get('/admin/students', [AdminController::class, 'studentList'])->name('admin.students');
+    Route::post('/add-student', [AdminController::class, 'addStudent'])->name('addStudent');
+    Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('editStudent');
+    Route::post('/delete-student', [AdminController::class, 'deleteStudent'])->name('deleteStudent');
 });
 Route::group(['middleware' => ['web', 'checkUser']], function () {
     Route::get('/dashboard', [AuthController::class, 'loadDashboard'])->name('load.dashboard');
