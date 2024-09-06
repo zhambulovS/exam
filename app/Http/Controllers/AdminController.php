@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\QnaExam;
 use App\Models\Question;
 use App\Models\User;
 use http\Env\Response;
@@ -66,11 +67,13 @@ class AdminController extends Controller
 
     public function addExam(Request $request){
         try{
+            $unique_id = uniqid('exid');
             Exam::insert([
                 'exam_name'=>$request->exam_name,
                 'subject_id'=>$request->subject_id,
                 'date'=>$request->date,
                 'time'=>$request->time,
+                'enterance_id'=>$unique_id,
             ]);
             return response()->json(['success' => true, 'msg' => 'Exam added successfully.']);
         }catch (\Exception $e) {
@@ -237,5 +240,64 @@ class AdminController extends Controller
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         }
     }
+    public function getQuestions(Request $request)
+    {
+        try {
+            $questions = Question::all();
+            if (count($questions) > 0) {
+                $data = [];
+                $counter = 0;
+                foreach ($questions as $question) {
+                    $qnaExam = QnaExam::where(['exam_id' => $request->exam_id, 'question_id' => $question->id])->get();
 
+                    if(count($qnaExam) == 0){
+                        $data[$counter]['id'] = $question->id;
+                        $data[$counter]['question'] = $question->question;
+                        $counter++;
+                    }
+                }
+                return response()->json(['success' => true, 'data' => $data, 'msg' => 'Questions retrieved successfully.']);
+            } else {
+                return response()->json(['success' => false, 'msg' => 'No questions found.']);
+            }
+        } catch (\Throwable $th) {
+            return response()->json(['success' => false, 'msg' => $th->getMessage()]);
+        }
+    }
+
+    public function addQuestions(Request $request)
+    {
+        try{
+            if(isset($request->questions_ids)){
+                foreach($request->questions_ids as $qid){
+                    QnaExam::insert([
+                        'exam_id' => $request->exam_id,
+                        'question_id' => $qid
+                    ]);
+                }
+            }
+            return response()->json(['success' => true, 'msg' => 'Question added successfully.']);
+        }catch (\Exception $e){
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    public function getExamQuestions(Request $request)
+    {
+        try{
+            $data = QnaExam::where('exam_id', $request->exam_id)->with('question')->get();
+            return response()->json(['success' => true, 'data' => $data, 'msg' => 'Questions retrieved successfully.']);
+        }catch (\Exception $e){
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+    public function deleteExamQuestions(Request $request)
+    {
+        try {
+            $data = QnaExam::where('id', $request->id)->delete();
+            return response()->json(['success' => true, 'data'=>$data,'msg' => 'Questions deleted successfully.']);
+        }catch (\Exception $e){
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
 }

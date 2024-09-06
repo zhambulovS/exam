@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\ExamController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 
 Route::get('/register', [AuthController::class, 'loadRegister'])->name('loadRegister');
 Route::post('/register', [AuthController::class, 'studentRegister'])->name('studentRegister');
@@ -46,7 +48,18 @@ Route::group(['middleware' => ['web', 'checkAdmin']], function () {
     Route::post('/add-student', [AdminController::class, 'addStudent'])->name('addStudent');
     Route::post('/edit-student', [AdminController::class, 'editStudent'])->name('editStudent');
     Route::post('/delete-student', [AdminController::class, 'deleteStudent'])->name('deleteStudent');
+
+    Route::get('/get-questions', [AdminController::class, 'getQuestions'])->name('getQuestions');
+    Route::get('/add-questions', [AdminController::class, 'addQuestions'])->name('addQuestions');
+    Route::get('/get-exam-questions', [AdminController::class, 'getExamQuestions'])->name('getExamQuestions');
+    Route::get('/delete-exam-questions', [AdminController::class, 'deleteExamQuestions'])->name('deleteExamQuestions');
+
 });
+
 Route::group(['middleware' => ['web', 'checkUser']], function () {
-    Route::get('/dashboard', [AuthController::class, 'loadDashboard'])->name('load.dashboard');
+    Route::get('/user/dashboard', [AuthController::class, 'loadDashboard'])->name('user.dashboard');
+
+    Route::get('/exam/{id}', [ExamController::class, 'index'])->name('loadExamDashboard');
+    Route::post('/exam-submit', [ExamController::class, 'examSubmit'])->name('examSubmit');
+
 });

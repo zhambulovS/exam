@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Exam;
 use App\Models\Subject;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -24,7 +25,8 @@ class AuthController extends Controller
         return view('auth.login');
     }
     public function loadDashboard(){
-        return view('user.dashboard');
+        $exams = Exam::with('subject')->orderBy('date')->get();
+        return view('user.dashboard', ['exams'=>$exams]);
     }
     public function adminDashboard(){
         $subjects = Subject::all();
@@ -75,7 +77,7 @@ class AuthController extends Controller
             if (Auth::user()->is_admin == 1) {
                 return redirect()->route('admin.dashboard');
             } else {
-                return redirect()->route('load.dashboard');
+                return redirect()->route('user.dashboard');
             }
         } else {
             return back()->with('error', 'Invalid Credentials');

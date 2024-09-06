@@ -14,10 +14,32 @@
 </head>
 <body>
 
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar">
+        <div class="custom-menu">
+            <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                <i class="fa fa-bars"></i>
+                <span class="sr-only">Toggle Menu</span>
+            </button>
+        </div>
+        <h1><a href="{{route('user.dashboard')}}" class="logo">{{Auth::user()->name}}</a></h1>
+        <ul class="list-unstyled components mb-5">
+            <li>
+                <a href="{{route('user.dashboard')}}"><span class="fa fa-book mr-3"></span> Subjects</a>
+            </li>
+            <li>
+                <a href="{{route('admin.examDashboard')}}"><span class="fa fa-desktop mr-3"></span> Exams</a>
+            </li>
+            <li>
+                <a href="{{route('logout')}}"><span class="fa fa-sign-out mr-3"></span> Logout</a>
+            </li>
+        </ul>
+    </nav>
 
-
+    <div id="content" class="p-4 p-md-5 pt-5">
         @yield('content')
-
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{asset('assets/js/admin/popper.js')}}"></script>
