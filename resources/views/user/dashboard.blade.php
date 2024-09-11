@@ -26,7 +26,7 @@
                     <td> {{ \Carbon\Carbon::parse($exam->date)->format('d-m-Y') }} </td>
                     <td> {{ $exam->time }} </td>
                     <td> {{ $exam->attempt }}</td>
-                    <td> </td>
+                    <td> {{ $exam->attempt_counter }} </td>
                     <td> <a href="#" data-code="{{$exam->enterance_id}}" class="copy" ><i class="fa fa-copy"></i></a> </td>
                 </tr>
             @endforeach

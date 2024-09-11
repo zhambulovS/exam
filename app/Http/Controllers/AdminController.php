@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Answer;
 use App\Models\Exam;
+use App\Models\ExamAnswer;
+use App\Models\ExamAttempt;
 use App\Models\QnaExam;
 use App\Models\Question;
 use App\Models\User;
@@ -296,6 +298,64 @@ class AdminController extends Controller
         try {
             $data = QnaExam::where('id', $request->id)->delete();
             return response()->json(['success' => true, 'data'=>$data,'msg' => 'Questions deleted successfully.']);
+        }catch (\Exception $e){
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    public function markDashboard()
+    {
+        $exams = Exam::with('getQnaExam')->get();
+        return view('admin.markDashboard', compact('exams'));
+    }
+
+    public function updateMarks(Request $request)
+    {
+        try{
+            Exam::where('id', $request->exam_id)->update([
+                'marks'=>$request->marks
+            ]);
+            return response()->json(['success' => true, 'msg' => 'Marks updated successfully.']);
+        }catch (\Exception $e){
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    public function reviewExams()
+    {
+        $attempts = ExamAttempt::with(['user', 'exam'])->orderBy('id')->get();
+        return view('admin.reviewExams', compact('attempts'));
+    }
+    public function reviewQna(Request $request)
+    {
+        try {
+            $attemptData = ExamAnswer::where('attempt_id', $request->attempt_id)->with('question', 'answer')->get();
+            return response()->json(['success' => true, 'data' => $attemptData, 'msg' => 'Questions retrieved successfully.']);
+        }catch (\Exception $e){
+            return response()->json(['success' => false, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    public function approveQna(Request $request)
+    {
+        try{
+            $attemptId = $request->attempt_id;
+            $examData = ExamAttempt::where('id', $attemptId)->with('exam')->get();
+            $marks = $examData[0]['exam']['marks'];
+            $attemptData = ExamAnswer::where('attempt_id', $attemptId)->with('answer')->get();
+            $totalMarks = 0;
+            if(count($attemptData) > 0){
+                foreach($attemptData as $attempt){
+                    if($attempt->answer->is_correct == 1){
+                        $totalMarks += $marks;
+                    }
+                }
+            }
+            ExamAttempt::where('id', $attemptId)->update([
+                'status'=>1,
+                'marks'=>$totalMarks
+            ]);
+            return response()->json(['success' => true, 'msg' => 'Question approved successfully.']);
         }catch (\Exception $e){
             return response()->json(['success' => false, 'msg' => $e->getMessage()]);
         }

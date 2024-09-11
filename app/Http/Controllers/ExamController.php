@@ -16,7 +16,11 @@ class ExamController extends Controller
     {
         $qnaExam = Exam::where('enterance_id', $id)->with('getQnaExam')->get();
         if (count($qnaExam) > 0) {
-            if($qnaExam[0]['date'] == date("Y-m-d")){
+            $attemptCount = ExamAttempt::where(['exam_id' => $qnaExam[0]['id'], 'user_id' => auth() -> user()-> id])->count();
+            if($attemptCount > 0){
+                return view('user.exam-dashboard', ['success'=>false, 'msg'=>'You have already taken this exam', 'exam'=>$qnaExam]);
+            }
+            else if($qnaExam[0]['date'] == date("Y-m-d")){
                 if(count($qnaExam[0]['getQnaExam']) > 0){
                    $qna = QnaExam::where('exam_id', $qnaExam[0]['id'])->with('question', 'answers')->inRandomOrder()->get();
                     return view('user.exam-dashboard', ['success'=>true, 'exam'=>$qnaExam, 'qna'=>$qna ]);
@@ -42,13 +46,12 @@ class ExamController extends Controller
 
         $qcount = count($request->q);
         for ($i=0; $i < $qcount; $i++) {
-            if(!empty($request->input('ans_'.($i+1)))){
+//                dd(request()->input('ans_'.$i),request()->input('ans_'.$i+1));
                 ExamAnswer::insert([
                     'attempt_id' => $attempt_id,
                     'question_id' => $request->q[$i],
-                    'answer_id' => request()->input('ans_'.$i),
+                    'answer_id' => request()->input('ans_'.($i+1)),
                 ]);
-            }
         }
 
         return view('thank-you');

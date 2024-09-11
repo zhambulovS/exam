@@ -31,10 +31,16 @@
                 <a href="{{route('admin.examDashboard')}}"><span class="fa fa-desktop mr-3"></span> Exams</a>
             </li>
             <li>
+                <a href="{{route('admin.markDashboard')}}"><span class="fa fa-check mr-3"></span> Marks</a>
+            </li>
+            <li>
                 <a href="{{route('admin.qnaDashboard')}}"><span class="fa fa-question-circle mr-3"></span> Q&A</a>
             </li>
             <li>
                 <a href="{{route('admin.students')}}"><span class="fa fa-graduation-cap mr-3"></span>Students</a>
+            </li>
+            <li>
+                <a href="{{route('admin.reviewExams')}}"><span class="fa fa-file-text-o mr-3"></span>Exam Reviews</a>
             </li>
             <li>
                 <a href="{{route('logout')}}"><span class="fa fa-sign-out mr-3"></span> Logout</a>
