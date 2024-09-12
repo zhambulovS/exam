@@ -42,6 +42,40 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('loadLogin');
     }
+    public function subjectsShow(){
+        $subjects = Subject::all();
+        return view('user.subjects', ['subjects' => $subjects]);
+    }
+    public function user()
+    {
+        return view('user.profile', ['user' => Auth::user()]);
+    }
+    public function editUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'nullable|string|max:255',
+            'number' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,' . auth()->user()->id,
+            'country' => 'nullable|string|max:255',
+            'state' => 'nullable|string|max:255',
+        ]);
+
+        $user = auth()->user();
+
+        $user->name = $request->input('name');
+        $user->surname = $request->input('surname');
+        $user->number = $request->input('number');
+        $user->address = $request->input('address');
+        $user->email = $request->input('email');
+        $user->country = $request->input('country');
+        $user->state = $request->input('state');
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile updated successfully!');
+    }
 
     //login register functions
     public function studentRegister(Request $request)

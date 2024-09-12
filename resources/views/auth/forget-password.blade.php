@@ -1,40 +1,53 @@
 @extends('layouts.app')
-
+<title>Forget password</title>
 @section('content')
-    <h1>Forget Password</h1>
+    <section class="vh-100" style="background-color: #508bfc;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                        <div class="card-body p-5 text-center">
 
-    {{-- Display Validation Errors --}}
-    @if ($errors->any())
-        <div style="color: red;">
-            @foreach($errors->all() as $error)
-                <p>{{ $error }}</p>
-            @endforeach
-        </div>
-    @endif
+                            <h3 class="mb-5">Forget Password</h3>
 
-    {{-- Display Success Message --}}
-    @if(Session::has('error'))
-        <div style="color: red;">
-            <p>{{ Session::get('error') }}</p>
-        </div>
-    @endif
-    @if(Session::has('success'))
-        <div style="color: green;">
-            <p>{{ Session::get('success') }}</p>
-        </div>
-    @endif
-    {{-- Registration Form --}}
-    <form action="{{ route('forgetPassword') }}" method="POST">
-        @csrf
-        <div>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="Enter email" value="{{ old('email') }}">
-        </div>
-        <br>
+                            {{-- Display Validation Errors --}}
+                            @if ($errors->any())
+                                <div style="color: red;">
+                                    @foreach($errors->all() as $error)
+                                        <p>{{ $error }}</p>
+                                    @endforeach
+                                </div>
+                            @endif
 
-        <div>
-            <input type="submit" value="Forget Password">
+                            {{-- Display Success/Error Message --}}
+                            @if(Session::has('error'))
+                                <div style="color: red;">
+                                    <p>{{ Session::get('error') }}</p>
+                                </div>
+                            @endif
+                            @if(Session::has('success'))
+                                <div style="color: green;">
+                                    <p>{{ Session::get('success') }}</p>
+                                </div>
+                            @endif
+
+                            {{-- Forget Password Form --}}
+                            <form action="{{ route('forgetPassword') }}" method="POST">
+                                @csrf
+                                <div data-mdb-input-init class="form-outline mb-4">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="email" id="email" name="email" class="form-control form-control-plaintext" placeholder="Enter email here" value="{{ old('email') }}" />
+                                </div>
+
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block" type="submit">Forget Password</button>
+                            </form>
+
+                            <a href="/" class="d-block mt-3">Login</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </form>
-    <a href="/">Login</a>
+    </section>
 @endsection

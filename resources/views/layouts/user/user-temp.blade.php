@@ -11,6 +11,7 @@
     <title>Examination</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{asset('assets/css/admin/style.css')}}">
+
 </head>
 <body>
 
@@ -22,13 +23,13 @@
                 <span class="sr-only">Toggle Menu</span>
             </button>
         </div>
-        <h1><a href="{{route('user.dashboard')}}" class="logo">{{Auth::user()->name}}</a></h1>
+        <h1><a href="{{route('user')}}" class="logo">{{Auth::user()->name}}</a></h1>
         <ul class="list-unstyled components mb-5">
             <li>
-                <a href="{{route('user.dashboard')}}"><span class="fa fa-book mr-3"></span> Subjects</a>
+                <a href="{{route('user.subject')}}"><span class="fa fa-book mr-3"></span> Subjects</a>
             </li>
             <li>
-                <a href="{{route('admin.examDashboard')}}"><span class="fa fa-desktop mr-3"></span> Exams</a>
+                <a href="{{route('user.dashboard')}}"><span class="fa fa-desktop mr-3"></span> Exams</a>
             </li>
             <li>
                 <a href="{{route('logout')}}"><span class="fa fa-sign-out mr-3"></span> Logout</a>

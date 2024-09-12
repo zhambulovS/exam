@@ -11,18 +11,18 @@
     <title>Examination</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{asset('assets/css/admin/style.css')}}">
+
 </head>
 <body>
-
-
-
+    <style>
+        input.form-control.form-control-plaintext {
+            border: 1px solid #ccc;
+        }
+    </style>
         @yield('content')
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{asset('assets/js/admin/popper.js')}}"></script>
 <script src="{{asset('assets/js/admin/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/js/admin/main.js')}}"></script>
-
 </body>
 </html>

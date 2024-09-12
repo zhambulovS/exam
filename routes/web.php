@@ -69,4 +69,7 @@ Route::group(['middleware' => ['web', 'checkUser']], function () {
     Route::get('/exam/{id}', [ExamController::class, 'index'])->name('loadExamDashboard');
     Route::post('/exam-submit', [ExamController::class, 'examSubmit'])->name('examSubmit');
 
+    Route::get('/user/subject', [AuthController::class, 'subjectsShow'])->name('user.subject');
+    Route::get('/user', [AuthController::class, 'user'])->name('user');
+    Route::post('/edit-user', [AuthController::class, 'editUser'])->name('editUser');
 });
